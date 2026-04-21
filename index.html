@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxe Bloom — Premium Bridal Boutique & Makeup Studio</title>
+<meta name="description" content="Transform your beauty with elegance. Premium bridal makeup, hair styling, mehendi, and skincare services.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --primary: #c97b8b;
+  --primary-dark: #a85a6b;
+  --primary-light: #e8a0bf;
+  --gold: #c9a96e;
+  --gold-light: #e0c992;
+  --gold-dark: #a8884a;
+  --peach: #f5c6a0;
+  --rose: #f0d5d5;
+  --cream: #fdf6f0;
+  --cream-dark: #f5ebe0;
+  --beige: #faf5f0;
+  --white: #ffffff;
+  --text-dark: #2d2d2d;
+  --text-medium: #5a5a5a;
+  --text-light: #8a8a8a;
+  --glass-bg: rgba(255,255,255,0.15);
+  --glass-border: rgba(255,255,255,0.25);
+  --card-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  --card-hover-shadow: 0 16px 48px rgba(0,0,0,0.15);
+  --radius: 16px;
+  --radius-sm: 8px;
+  --radius-lg: 24px;
+  --transition: 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Poppins', sans-serif;
+  --nav-height: 80px;
+}
+[data-theme="dark"] {
+  --cream: #1a1a2e;
+  --cream-dark: #16213e;
+  --beige: #0f0f23;
+  --white: #1a1a2e;
+  --text-dark: #f0f0f0;
+  --text-medium: #c0c0c0;
+  --text-light: #888;
+  --glass-bg: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.1);
+  --card-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  --card-hover-shadow: 0 16px 48px rgba(0,0,0,0.4);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-height); }
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  line-height: 1.7;
+  transition: background 0.5s, color 0.5s;
+}
+img {
+  max-width: 100%;
+  display: block;
+  background: var(--cream-dark);
+  border-radius: inherit;
+}
+a { text-decoration:none; color:inherit; }
+ul { list-style:none; }
+button { cursor:pointer; border:none; outline:none; font-family:var(--font-body); }
+input, select, textarea { font-family:var(--font-body); outline:none; }
+
+/* LOADER */
+#loader {
+  position:fixed; inset:0; z-index:100000;
+  background: linear-gradient(135deg, var(--cream), var(--rose), var(--peach));
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  transition: opacity 0.6s, visibility 0.6s;
+}
+#loader.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+.loader-logo {
+  font-family:var(--font-display); font-size:2.8rem; font-weight:700;
+  background: linear-gradient(135deg, var(--primary-dark), var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  animation: loaderPulse 1.5s ease-in-out infinite;
+}
+.loader-spinner {
+  width:40px; height:40px; border:3px solid var(--primary-light);
+  border-top-color:var(--gold); border-radius:50%;
+  animation: spin 0.8s linear infinite; margin-top:20px;
+}
+@keyframes loaderPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.7;transform:scale(0.98)} }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* SCROLL PROGRESS */
+#scrollProgress {
+  position:fixed; top:0; left:0; height:3px; z-index:10001;
+  background: linear-gradient(90deg, var(--primary), var(--gold), var(--peach));
+  width:0; transition: width 0.1s;
+}
+
+/* NAVBAR */
+.navbar {
+  position:fixed; top:0; left:0; right:0; z-index:10000;
+  height:var(--nav-height); display:flex; align-items:center; justify-content:space-between;
+  padding:0 clamp(20px,4vw,60px);
+  transition: background 0.4s, box-shadow 0.4s, backdrop-filter 0.4s;
+}
+.navbar.scrolled {
+  background: rgba(253,246,240,0.85);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+}
+[data-theme="dark"] .navbar.scrolled { background: rgba(26,26,46,0.9); }
+.nav-logo {
+  font-family:var(--font-display); font-size:1.8rem; font-weight:700;
+  background: linear-gradient(135deg, var(--primary-dark), var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.nav-logo span { font-weight:400; font-style:italic; }
+.nav-links { display:flex; gap:32px; align-items:center; }
+.nav-links a {
+  font-size:0.85rem; font-weight:500; letter-spacing:0.05em; text-transform:uppercase;
+  color:var(--text-dark); position:relative; transition: color var(--transition);
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:-4px; left:0; width:0; height:2px;
+  background: linear-gradient(90deg, var(--primary), var(--gold));
+  transition: width var(--transition);
+}
+.nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+.nav-links a:hover { color:var(--primary-dark); }
+.nav-actions { display:flex; gap:12px; align-items:center; }
+.theme-toggle {
+  width:40px; height:40px; border-radius:50%;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1rem; color:var(--text-dark); transition: all var(--transition);
+}
+.theme-toggle:hover { background:var(--primary-light); color:#fff; transform:rotate(30deg); }
+
+/* CART BUTTON - overflow visible so badge shows */
+.nav-checkout-btn {
+  padding:8px 20px; border-radius:30px; font-size:0.8rem; font-weight:600;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  color:#fff; letter-spacing:0.05em; text-transform:uppercase;
+  transition: all var(--transition); position:relative;
+  overflow: visible !important;
+}
+.nav-checkout-btn:hover { transform:translateY(-2px); box-shadow:0 4px 20px rgba(201,123,139,0.4); }
+
+/* CART BADGE - clearly visible */
+.cart-badge {
+  position:absolute; top:-8px; right:-8px;
+  width:20px; height:20px; border-radius:50%;
+  background:#e74c3c; color:#fff; font-size:0.65rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transform:scale(0); transition:all 0.3s;
+  z-index:100; border:2px solid var(--cream);
+  box-shadow:0 2px 8px rgba(231,76,60,0.5);
+  line-height:1;
+}
+.cart-badge.show { opacity:1; transform:scale(1); }
+
+.hamburger { display:none; flex-direction:column; gap:5px; background:none; padding:5px; }
+.hamburger span { width:24px; height:2px; background:var(--text-dark); transition: all 0.3s; border-radius:2px; }
+.hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+.hamburger.active span:nth-child(2) { opacity:0; }
+.hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
+/* HERO */
+.hero {
+  min-height:100vh; position:relative; display:flex; align-items:center;
+  justify-content:center; overflow:hidden;
+  background: linear-gradient(135deg, #fdf6f0 0%, #f0d5d5 30%, #f5c6a0 60%, #e8a0bf 100%);
+}
+[data-theme="dark"] .hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #2a1a3e 30%, #1a2a3e 60%, #2a1a2e 100%);
+}
+.hero-bg-animation {
+  position:absolute; inset:0; z-index:0;
+  background: linear-gradient(135deg, #fdf6f0, #f0d5d5, #f5c6a0, #e8a0bf, #fdf6f0);
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+}
+[data-theme="dark"] .hero-bg-animation {
+  background: linear-gradient(135deg, #1a1a2e, #2a1a3e, #1a2a3e, #2a1a2e, #1a1a2e);
+  background-size: 400% 400%;
+}
+@keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+.hero-particles { position:absolute; inset:0; z-index:1; overflow:hidden; }
+.particle {
+  position:absolute; border-radius:50%;
+  background: radial-gradient(circle, rgba(201,123,139,0.15), rgba(201,169,110,0.08));
+  animation: floatParticle linear infinite;
+}
+@keyframes floatParticle {
+  0%{transform:translateY(100vh) scale(0); opacity:0} 10%{opacity:1} 90%{opacity:1}
+  100%{transform:translateY(-10vh) scale(1); opacity:0}
+}
+.floating-shapes { position:absolute; inset:0; z-index:1; pointer-events:none; }
+.fshape { position:absolute; border-radius:50%; opacity:0.12; animation: floatShape 8s ease-in-out infinite; }
+.fshape:nth-child(1) { width:300px; height:300px; top:10%; left:5%; background:radial-gradient(circle,var(--primary-light),transparent); animation-delay:0s; animation-duration:10s; }
+.fshape:nth-child(2) { width:200px; height:200px; top:60%; right:10%; background:radial-gradient(circle,var(--gold-light),transparent); animation-delay:2s; animation-duration:8s; }
+.fshape:nth-child(3) { width:150px; height:150px; bottom:20%; left:30%; background:radial-gradient(circle,var(--peach),transparent); animation-delay:4s; animation-duration:12s; }
+.fshape:nth-child(4) { width:250px; height:250px; top:30%; right:25%; background:radial-gradient(circle,var(--rose),transparent); animation-delay:1s; animation-duration:9s; }
+@keyframes floatShape {
+  0%,100%{transform:translate(0,0) rotate(0deg)} 25%{transform:translate(30px,-30px) rotate(5deg)}
+  50%{transform:translate(-20px,20px) rotate(-3deg)} 75%{transform:translate(15px,15px) rotate(3deg)}
+}
+.hero-content { position:relative; z-index:2; text-align:center; max-width:800px; padding:0 20px; }
+.hero-badge {
+  display:inline-block; padding:8px 24px; border-radius:30px;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  backdrop-filter:blur(10px); font-size:0.75rem; font-weight:500;
+  letter-spacing:0.15em; text-transform:uppercase; color:var(--primary-dark);
+  margin-bottom:24px; animation: fadeInDown 1s 0.3s both;
+}
+.hero-title {
+  font-family:var(--font-display); font-size:clamp(2.5rem,6vw,4.5rem);
+  font-weight:700; line-height:1.1; margin-bottom:20px;
+  color:var(--text-dark); animation: fadeInUp 1s 0.5s both;
+}
+.hero-title .typed-text {
+  background: linear-gradient(135deg, var(--primary-dark), var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.hero-title .cursor {
+  display:inline-block; width:3px; height:0.9em; background:var(--primary);
+  margin-left:4px; animation: blink 1s step-end infinite; vertical-align:text-bottom;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.hero-subtitle {
+  font-size:clamp(1rem,2vw,1.2rem); color:var(--text-medium);
+  max-width:550px; margin:0 auto 36px; font-weight:300; animation: fadeInUp 1s 0.7s both;
+}
+.hero-btns { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; animation: fadeInUp 1s 0.9s both; }
+.btn-primary {
+  padding:14px 36px; border-radius:50px; font-size:0.9rem; font-weight:600;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color:#fff; letter-spacing:0.03em; transition: all var(--transition);
+  position:relative; overflow:hidden;
+}
+.btn-primary:hover { transform:translateY(-3px); box-shadow:0 8px 30px rgba(201,123,139,0.4); }
+.btn-primary .ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,0.3); transform:scale(0); animation: ripple 0.6s linear; }
+@keyframes ripple { to{transform:scale(4);opacity:0} }
+.btn-secondary {
+  padding:14px 36px; border-radius:50px; font-size:0.9rem; font-weight:600;
+  background:transparent; color:var(--text-dark);
+  border:2px solid var(--glass-border); backdrop-filter:blur(10px);
+  transition: all var(--transition); position:relative; overflow:hidden;
+}
+.btn-secondary:hover { background:var(--glass-bg); border-color:var(--primary-light); transform:translateY(-3px); }
+.scroll-indicator {
+  position:absolute; bottom:30px; left:50%; transform:translateX(-50%);
+  z-index:2; display:flex; flex-direction:column; align-items:center; gap:8px;
+  animation: fadeInUp 1s 1.2s both;
+}
+.scroll-indicator span { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-light); }
+.scroll-mouse { width:24px; height:38px; border:2px solid var(--primary-light); border-radius:12px; position:relative; }
+.scroll-mouse::before {
+  content:''; width:4px; height:8px; background:var(--primary);
+  border-radius:2px; position:absolute; top:6px; left:50%; transform:translateX(-50%);
+  animation: scrollDown 2s ease-in-out infinite;
+}
+@keyframes scrollDown { 0%{top:6px;opacity:1} 100%{top:22px;opacity:0} }
+
+/* SECTIONS */
+section { padding:clamp(60px,8vw,120px) clamp(20px,4vw,60px); }
+.section-header { text-align:center; margin-bottom:60px; }
+.section-tag {
+  display:inline-block; padding:6px 20px; border-radius:30px;
+  background: linear-gradient(135deg, rgba(201,123,139,0.1), rgba(201,169,110,0.1));
+  font-size:0.75rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase;
+  color:var(--primary-dark); margin-bottom:16px;
+}
+.section-title { font-family:var(--font-display); font-size:clamp(2rem,4vw,3rem); font-weight:600; color:var(--text-dark); margin-bottom:16px; }
+.section-title span { background:linear-gradient(135deg,var(--primary-dark),var(--gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.section-subtitle { font-size:1rem; color:var(--text-medium); max-width:550px; margin:0 auto; font-weight:300; }
+.section-separator { width:60px; height:3px; margin:20px auto 0; background:linear-gradient(90deg,var(--primary),var(--gold)); border-radius:2px; }
+
+.fade-in { opacity:0; transform:translateY(40px); transition: opacity 0.8s, transform 0.8s; }
+.fade-in.visible { opacity:1; transform:translateY(0); }
+.fade-in-left { opacity:0; transform:translateX(-40px); transition: opacity 0.8s, transform 0.8s; }
+.fade-in-left.visible { opacity:1; transform:translateX(0); }
+.fade-in-right { opacity:0; transform:translateX(40px); transition: opacity 0.8s, transform 0.8s; }
+.fade-in-right.visible { opacity:1; transform:translateX(0); }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeInDown { from{opacity:0;transform:translateY(-30px)} to{opacity:1;transform:translateY(0)} }
+
+/* ===== ABOUT / EXPERIENCE SECTION ===== */
+.about { background:var(--white); transition: background 0.5s; }
+.about-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;
+  max-width:1200px; margin:0 auto;
+}
+.about-left-col { display:flex; flex-direction:column; gap:16px; }
+
+.about-image-wrapper {
+  position:relative;
+  border-radius: var(--radius-lg);
+  overflow: visible;
+}
+.about-image-wrapper > img {
+  width:100%; border-radius:var(--radius-lg); aspect-ratio:4/5; object-fit:cover;
+  box-shadow: var(--card-shadow);
+  display:block;
+}
+.about-image-accent {
+  position:absolute; top:-16px; right:-16px; width:180px; height:180px;
+  border:3px solid var(--gold-light); border-radius:var(--radius-lg);
+  z-index:-1; opacity:0.5; pointer-events:none;
+}
+.about-exp-badge {
+  position:absolute; bottom:20px; left:-20px;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  color:#fff; padding:18px 24px; border-radius:var(--radius);
+  text-align:center; box-shadow: 0 8px 30px rgba(201,123,139,0.3);
+  z-index:2;
+}
+.about-exp-badge .num { font-family:var(--font-display); font-size:2.2rem; font-weight:700; display:block; line-height:1; }
+.about-exp-badge .label { font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; opacity:0.9; }
+
+/* Experience images - separated from main image */
+.about-experience-images {
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+}
+.about-experience-images .exp-img {
+  width:100%; height:150px; object-fit:cover; border-radius:var(--radius);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: transform var(--transition), box-shadow var(--transition);
+  display:block;
+}
+.about-experience-images .exp-img:hover {
+  transform:scale(1.04);
+  box-shadow:0 8px 28px rgba(0,0,0,0.15);
+}
+.about-experience-label {
+  font-size:0.75rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--gold-dark); margin-bottom:4px; text-align:center;
+}
+
+.about-text h3 { font-family:var(--font-display); font-size:1.8rem; margin-bottom:16px; color:var(--text-dark); }
+.about-text p { color:var(--text-medium); margin-bottom:16px; font-weight:300; }
+.about-awards { display:flex; gap:16px; margin-top:28px; flex-wrap:wrap; }
+.about-award-item {
+  display:flex; align-items:center; gap:12px; padding:12px 18px;
+  background: linear-gradient(135deg, rgba(201,123,139,0.08), rgba(201,169,110,0.08));
+  border-radius:var(--radius-sm); border:1px solid rgba(201,169,110,0.15);
+}
+.about-award-item i { color:var(--gold); font-size:1.1rem; }
+.about-award-item span { font-size:0.82rem; font-weight:500; }
+
+/* ===== SERVICES ===== */
+.services { background:var(--cream); transition: background 0.5s; }
+.services-grid {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(320px,1fr));
+  gap:28px; max-width:1200px; margin:0 auto;
+}
+.service-card {
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border-radius:var(--radius-lg); overflow:hidden;
+  transition: all var(--transition); position:relative;
+  cursor:default;
+}
+[data-theme="dark"] .service-card { background:rgba(255,255,255,0.03); }
+.service-card-img-wrap { overflow:hidden; height:210px; }
+.service-card-img {
+  width:100%; height:100%; object-fit:cover;
+  transition: transform 0.6s; display:block;
+}
+.service-card:hover .service-card-img { transform:scale(1.06); }
+.service-card-body { padding:28px; position:relative; z-index:1; }
+.service-card::before {
+  content:''; position:absolute; inset:0;
+  background: linear-gradient(135deg, rgba(201,123,139,0.05), rgba(201,169,110,0.05));
+  opacity:0; transition: opacity var(--transition); z-index:0;
+}
+.service-card:hover::before { opacity:1; }
+.service-card:hover {
+  transform:translateY(-8px); box-shadow:var(--card-hover-shadow);
+  border-color:rgba(201,123,139,0.3);
+}
+.service-icon {
+  width:56px; height:56px; border-radius:14px;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; color:#fff; margin-bottom:16px;
+  transition: transform var(--transition);
+}
+.service-card:hover .service-icon { transform:scale(1.1) rotate(5deg); }
+.service-card h3 { font-family:var(--font-display); font-size:1.25rem; margin-bottom:8px; color:var(--text-dark); }
+.service-card p { font-size:0.88rem; color:var(--text-medium); font-weight:300; margin-bottom:14px; line-height:1.6; }
+.service-price {
+  font-family:var(--font-display); font-size:1.3rem; font-weight:600;
+  background: linear-gradient(135deg, var(--primary-dark), var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.service-price small { font-size:0.72rem; font-weight:400; -webkit-text-fill-color:var(--text-light); }
+.service-add-btn {
+  margin-top:14px; padding:10px 24px; border-radius:30px; font-size:0.8rem; font-weight:600;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color:#fff; transition: all var(--transition); position:relative; overflow:hidden;
+}
+.service-add-btn:hover { transform:translateY(-2px); box-shadow:0 4px 16px rgba(201,123,139,0.3); }
+
+/* ===== APPOINTMENT ===== */
+.appointment { background:var(--white); transition:background 0.5s; position:relative; overflow:hidden; }
+.appointment::before {
+  content:''; position:absolute; top:-200px; right:-200px; width:500px; height:500px;
+  border-radius:50%; background:radial-gradient(circle,rgba(201,123,139,0.08),transparent); pointer-events:none;
+}
+.appointment-container { max-width:800px; margin:0 auto; position:relative; }
+.appointment-form {
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  backdrop-filter:blur(20px); border-radius:var(--radius-lg); padding:clamp(30px,5vw,50px);
+}
+[data-theme="dark"] .appointment-form { background:rgba(255,255,255,0.03); }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.form-group { position:relative; margin-bottom:4px; }
+.form-group.full { grid-column:1/-1; }
+.form-group input, .form-group select, .form-group textarea {
+  width:100%; padding:16px 18px; border-radius:var(--radius-sm);
+  border:2px solid rgba(201,123,139,0.15); background:rgba(255,255,255,0.6);
+  font-size:0.95rem; color:var(--text-dark); transition: all var(--transition);
+}
+[data-theme="dark"] .form-group input, [data-theme="dark"] .form-group select,
+[data-theme="dark"] .form-group textarea { background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1); }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  border-color:var(--primary); box-shadow:0 0 0 4px rgba(201,123,139,0.1);
+}
+.form-group textarea { resize:vertical; min-height:100px; }
+.form-group label {
+  position:absolute; left:18px; top:16px; font-size:0.95rem;
+  color:var(--text-light); pointer-events:none; transition: all 0.3s; background:transparent; padding:0 4px;
+}
+.form-group input:focus ~ label, .form-group input:not(:placeholder-shown) ~ label,
+.form-group select:focus ~ label, .form-group select:valid ~ label,
+.form-group textarea:focus ~ label, .form-group textarea:not(:placeholder-shown) ~ label {
+  top:-8px; left:14px; font-size:0.7rem; color:var(--primary); background:var(--white); font-weight:500;
+}
+[data-theme="dark"] .form-group input:focus ~ label,
+[data-theme="dark"] .form-group input:not(:placeholder-shown) ~ label,
+[data-theme="dark"] .form-group textarea:focus ~ label,
+[data-theme="dark"] .form-group textarea:not(:placeholder-shown) ~ label { background:var(--cream); }
+.form-error { font-size:0.75rem; color:#e74c3c; margin-top:4px; display:none; }
+.form-group.error input, .form-group.error select { border-color:#e74c3c; }
+.form-group.error .form-error { display:block; }
+.form-submit { grid-column:1/-1; margin-top:12px; }
+.submit-btn {
+  width:100%; padding:16px; border-radius:50px; font-size:1rem; font-weight:600;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  color:#fff; letter-spacing:0.03em; transition: all var(--transition); position:relative; overflow:hidden;
+}
+.submit-btn:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(201,123,139,0.4); }
+
+/* ===== GALLERY ===== */
+.gallery { background:var(--cream); transition:background 0.5s; }
+.gallery-filters { display:flex; justify-content:center; gap:12px; margin-bottom:40px; flex-wrap:wrap; }
+.gallery-filter-btn {
+  padding:8px 24px; border-radius:30px; font-size:0.8rem; font-weight:500;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  color:var(--text-medium); transition: all var(--transition); backdrop-filter:blur(10px);
+}
+.gallery-filter-btn.active, .gallery-filter-btn:hover {
+  background: linear-gradient(135deg, var(--primary), var(--gold)); color:#fff; border-color:transparent;
+}
+.gallery-masonry { columns:3; column-gap:20px; max-width:1200px; margin:0 auto; }
+.gallery-item {
+  break-inside:avoid; margin-bottom:20px; border-radius:var(--radius);
+  overflow:hidden; position:relative; cursor:pointer; transition: all var(--transition);
+}
+.gallery-item img { width:100%; display:block; transition: transform 0.6s; }
+.gallery-item:hover img { transform:scale(1.08); }
+.gallery-item-overlay {
+  position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.6),transparent);
+  opacity:0; transition: opacity var(--transition); display:flex; align-items:flex-end; padding:20px;
+}
+.gallery-item:hover .gallery-item-overlay { opacity:1; }
+.gallery-item-overlay span { color:#fff; font-size:0.9rem; font-weight:500; }
+
+/* LIGHTBOX */
+.lightbox {
+  position:fixed; inset:0; z-index:100000; background:rgba(0,0,0,0.92);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; visibility:hidden; transition: all 0.4s;
+}
+.lightbox.active { opacity:1; visibility:visible; }
+.lightbox img { max-width:90%; max-height:85vh; border-radius:8px; object-fit:contain; }
+.lightbox-close {
+  position:absolute; top:20px; right:20px; width:48px; height:48px;
+  border-radius:50%; background:rgba(255,255,255,0.1); color:#fff;
+  font-size:1.2rem; display:flex; align-items:center; justify-content:center;
+  transition:all 0.3s; border:1px solid rgba(255,255,255,0.2);
+}
+.lightbox-close:hover { background:rgba(255,255,255,0.2); transform:rotate(90deg); }
+.lightbox-nav {
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:48px; height:48px; border-radius:50%;
+  background:rgba(255,255,255,0.1); color:#fff; font-size:1.2rem;
+  display:flex; align-items:center; justify-content:center;
+  transition:all 0.3s; border:1px solid rgba(255,255,255,0.2);
+}
+.lightbox-nav:hover { background:rgba(255,255,255,0.2); }
+.lightbox-prev { left:20px; }
+.lightbox-next { right:20px; }
+
+/* ===== TESTIMONIALS ===== */
+.testimonials { background:var(--white); transition:background 0.5s; overflow:hidden; }
+.testimonials-track { display:flex; gap:28px; max-width:1200px; margin:0 auto; transition: transform 0.6s ease; }
+.testimonial-card {
+  min-width:calc(33.333% - 19px); flex-shrink:0;
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  backdrop-filter:blur(20px); border-radius:var(--radius-lg);
+  padding:36px 28px; transition: all var(--transition);
+}
+[data-theme="dark"] .testimonial-card { background:rgba(255,255,255,0.03); }
+.testimonial-card:hover { transform:translateY(-4px); box-shadow:var(--card-hover-shadow); }
+.testimonial-stars { margin-bottom:16px; }
+.testimonial-stars i { color:var(--gold); font-size:0.85rem; }
+.testimonial-text { font-size:0.95rem; color:var(--text-medium); font-weight:300; font-style:italic; margin-bottom:20px; line-height:1.8; }
+.testimonial-author { display:flex; align-items:center; gap:14px; }
+.testimonial-author img { width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid var(--primary-light); }
+.testimonial-author-info h4 { font-size:0.9rem; font-weight:600; color:var(--text-dark); }
+.testimonial-author-info span { font-size:0.75rem; color:var(--text-light); }
+.testimonials-dots { display:flex; justify-content:center; gap:8px; margin-top:32px; }
+.testimonials-dots button {
+  width:10px; height:10px; border-radius:50%;
+  background:var(--text-light); opacity:0.3; transition:all 0.3s;
+}
+.testimonials-dots button.active { opacity:1; background:var(--primary); transform:scale(1.2); }
+
+/* ===== PRICING ===== */
+.pricing { background:var(--cream); transition:background 0.5s; }
+.pricing-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:28px; max-width:1100px; margin:0 auto; }
+.pricing-card {
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  backdrop-filter:blur(20px); border-radius:var(--radius-lg);
+  padding:40px 32px; text-align:center; transition: all var(--transition);
+  position:relative; overflow:hidden;
+}
+[data-theme="dark"] .pricing-card { background:rgba(255,255,255,0.03); }
+.pricing-card.featured {
+  border-color:var(--primary-light);
+  background: linear-gradient(135deg, rgba(201,123,139,0.08), rgba(201,169,110,0.08));
+}
+.pricing-card.featured::before {
+  content:'RECOMMENDED'; position:absolute; top:20px; right:-32px;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  color:#fff; font-size:0.65rem; font-weight:700; letter-spacing:0.1em;
+  padding:4px 40px; transform:rotate(45deg);
+}
+.pricing-card:hover { transform:translateY(-8px); box-shadow:var(--card-hover-shadow); }
+.pricing-card h3 { font-family:var(--font-display); font-size:1.5rem; margin-bottom:8px; color:var(--text-dark); }
+.pricing-card .price {
+  font-family:var(--font-display); font-size:3rem; font-weight:700;
+  background: linear-gradient(135deg, var(--primary-dark), var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px;
+}
+.pricing-card .price small { font-size:1rem; font-weight:400; }
+.pricing-card .price-desc { font-size:0.85rem; color:var(--text-light); margin-bottom:24px; }
+.pricing-features { text-align:left; margin-bottom:28px; }
+.pricing-features li {
+  padding:8px 0; font-size:0.9rem; color:var(--text-medium);
+  display:flex; align-items:center; gap:10px; border-bottom:1px solid rgba(201,123,139,0.08);
+}
+.pricing-features li i { color:var(--gold); font-size:0.8rem; }
+.pricing-btn { padding:14px 36px; border-radius:50px; font-size:0.9rem; font-weight:600; transition: all var(--transition); position:relative; overflow:hidden; }
+.pricing-btn.primary-btn { background: linear-gradient(135deg, var(--primary), var(--gold)); color:#fff; }
+.pricing-btn.secondary-btn { background:transparent; border:2px solid var(--glass-border); color:var(--text-dark); }
+.pricing-btn:hover { transform:translateY(-2px); box-shadow:0 4px 20px rgba(201,123,139,0.3); }
+
+/* ===== CONTACT ===== */
+.contact { background:var(--white); transition:background 0.5s; }
+.contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; max-width:1200px; margin:0 auto; }
+.contact-form-wrap {
+  background:var(--glass-bg); border:1px solid var(--glass-border);
+  backdrop-filter:blur(20px); border-radius:var(--radius-lg); padding:36px;
+}
+[data-theme="dark"] .contact-form-wrap { background:rgba(255,255,255,0.03); }
+.contact-info { display:flex; flex-direction:column; gap:20px; }
+.contact-info-item {
+  display:flex; gap:16px; align-items:flex-start; padding:18px;
+  border-radius:var(--radius);
+  background: linear-gradient(135deg, rgba(201,123,139,0.06), rgba(201,169,110,0.06));
+  border:1px solid rgba(201,169,110,0.1);
+}
+.contact-info-item i {
+  width:44px; height:44px; border-radius:12px;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  display:flex; align-items:center; justify-content:center; color:#fff; font-size:1rem; flex-shrink:0;
+}
+.contact-info-item h4 { font-size:0.9rem; font-weight:600; color:var(--text-dark); margin-bottom:4px; }
+.contact-info-item p { font-size:0.85rem; color:var(--text-medium); font-weight:300; }
+.contact-map { border-radius:var(--radius); overflow:hidden; height:200px; border:1px solid var(--glass-border); }
+.contact-map iframe { width:100%; height:100%; border:none; filter:grayscale(0.3); }
+
+/* ===== FOOTER ===== */
+.footer { background:linear-gradient(135deg,#2d2d2d,#1a1a1a); color:#e0e0e0; padding:60px clamp(20px,4vw,60px) 20px; }
+.footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1.5fr; gap:40px; max-width:1200px; margin:0 auto 40px; }
+.footer-brand .footer-logo {
+  font-family:var(--font-display); font-size:1.6rem; font-weight:700;
+  background:linear-gradient(135deg,var(--primary-light),var(--gold-light));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:12px;
+}
+.footer-brand p { font-size:0.85rem; opacity:0.7; line-height:1.8; margin-bottom:16px; }
+.footer-socials { display:flex; gap:10px; }
+.footer-socials a {
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1);
+  display:flex; align-items:center; justify-content:center;
+  color:#e0e0e0; font-size:0.85rem; transition:all var(--transition);
+}
+.footer-socials a:hover { background:var(--primary); border-color:var(--primary); transform:translateY(-3px); }
+.footer-col h4 { font-family:var(--font-display); font-size:1.1rem; margin-bottom:16px; color:#fff; }
+.footer-col ul li { margin-bottom:10px; }
+.footer-col ul li a { font-size:0.85rem; opacity:0.7; transition:all 0.3s; }
+.footer-col ul li a:hover { opacity:1; color:var(--primary-light); padding-left:4px; }
+.footer-newsletter p { font-size:0.85rem; opacity:0.7; margin-bottom:12px; }
+.footer-newsletter-form { display:flex; gap:8px; }
+.footer-newsletter-form input {
+  flex:1; padding:10px 16px; border-radius:30px;
+  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1);
+  color:#fff; font-size:0.85rem;
+}
+.footer-newsletter-form input::placeholder { color:rgba(255,255,255,0.4); }
+.footer-newsletter-form button {
+  padding:10px 20px; border-radius:30px; font-size:0.8rem; font-weight:600;
+  background:linear-gradient(135deg,var(--primary),var(--gold)); color:#fff; transition:all var(--transition);
+}
+.footer-newsletter-form button:hover { transform:translateY(-2px); }
+.footer-bottom {
+  max-width:1200px; margin:0 auto; padding-top:20px;
+  border-top:1px solid rgba(255,255,255,0.08);
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+}
+.footer-bottom p { font-size:0.8rem; opacity:0.5; }
+
+.whatsapp-float {
+  position:fixed; bottom:24px; right:24px; z-index:9999;
+  width:56px; height:56px; border-radius:50%;
+  background:#25D366; color:#fff; font-size:1.6rem;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 20px rgba(37,211,102,0.4);
+  transition:all var(--transition); animation: whatsappPulse 2s infinite;
+}
+.whatsapp-float:hover { transform:scale(1.1); }
+@keyframes whatsappPulse { 0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.4)} 50%{box-shadow:0 4px 30px rgba(37,211,102,0.6)} }
+
+.back-to-top {
+  position:fixed; bottom:24px; left:24px; z-index:9999;
+  width:44px; height:44px; border-radius:50%;
+  background:linear-gradient(135deg,var(--primary),var(--gold));
+  color:#fff; font-size:1rem; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 16px rgba(201,123,139,0.3);
+  opacity:0; visibility:hidden; transform:translateY(20px); transition:all var(--transition);
+}
+.back-to-top.visible { opacity:1; visibility:visible; transform:translateY(0); }
+.back-to-top:hover { transform:translateY(-3px); }
+
+/* MODALS */
+.modal-overlay {
+  position:fixed; inset:0; z-index:100000; background:rgba(0,0,0,0.6);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; visibility:hidden; transition:all 0.4s; backdrop-filter:blur(4px);
+}
+.modal-overlay.active { opacity:1; visibility:visible; }
+.modal-content {
+  background:var(--cream); border-radius:var(--radius-lg); padding:48px;
+  max-width:440px; width:90%; text-align:center;
+  transform:scale(0.9); transition:transform 0.4s;
+}
+.modal-overlay.active .modal-content { transform:scale(1); }
+.modal-icon {
+  width:72px; height:72px; border-radius:50%; margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--primary),var(--gold));
+  display:flex; align-items:center; justify-content:center; font-size:2rem; color:#fff;
+}
+.modal-content h3 { font-family:var(--font-display); font-size:1.5rem; margin-bottom:10px; color:var(--text-dark); }
+.modal-content p { font-size:0.9rem; color:var(--text-medium); margin-bottom:24px; }
+.modal-close-btn {
+  padding:12px 32px; border-radius:30px; font-size:0.9rem; font-weight:600;
+  background:linear-gradient(135deg,var(--primary),var(--gold)); color:#fff; transition:all var(--transition);
+}
+.modal-close-btn:hover { transform:translateY(-2px); box-shadow:0 4px 16px rgba(201,123,139,0.3); }
+
+/* CHECKOUT */
+.checkout-overlay {
+  position:fixed; inset:0; z-index:100000; background:rgba(0,0,0,0.6);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; visibility:hidden; transition:all 0.4s; backdrop-filter:blur(4px);
+}
+.checkout-overlay.active { opacity:1; visibility:visible; }
+.checkout-panel {
+  background:var(--cream); border-radius:var(--radius-lg); padding:clamp(30px,4vw,48px);
+  max-width:560px; width:95%; max-height:90vh; overflow-y:auto;
+  transform:translateX(100%); transition:transform 0.5s;
+}
+.checkout-overlay.active .checkout-panel { transform:translateX(0); }
+.checkout-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; }
+.checkout-header h2 { font-family:var(--font-display); font-size:1.6rem; color:var(--text-dark); }
+.checkout-close {
+  width:40px; height:40px; border-radius:50%; background:var(--glass-bg);
+  border:1px solid var(--glass-border); display:flex; align-items:center; justify-content:center;
+  font-size:1rem; color:var(--text-dark); transition:all 0.3s;
+}
+.checkout-close:hover { background:var(--primary-light); color:#fff; transform:rotate(90deg); }
+.checkout-items { margin-bottom:24px; }
+.checkout-item { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(201,123,139,0.1); }
+.checkout-item-name { font-size:0.9rem; font-weight:500; }
+.checkout-item-price { font-family:var(--font-display); font-weight:600; color:var(--primary-dark); }
+.checkout-item-remove { background:none; color:var(--text-light); font-size:0.8rem; margin-left:12px; transition:color 0.3s; }
+.checkout-item-remove:hover { color:#e74c3c; }
+.checkout-total {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:16px 0; border-top:2px solid var(--primary-light); margin-bottom:24px;
+}
+.checkout-total span:first-child { font-size:1rem; font-weight:600; }
+.checkout-total span:last-child {
+  font-family:var(--font-display); font-size:1.5rem; font-weight:700;
+  background:linear-gradient(135deg,var(--primary-dark),var(--gold));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.checkout-empty { text-align:center; padding:30px 0; color:var(--text-light); }
+.checkout-empty i { font-size:2.5rem; margin-bottom:12px; display:block; opacity:0.3; }
+
+@keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+.btn-shimmer { background-size:200% auto; animation: shimmer 3s linear infinite; }
+
+/* RESPONSIVE */
+@media(max-width:1024px) {
+  .about-grid { grid-template-columns:1fr; gap:40px; }
+  .about-left-col { max-width:560px; margin:0 auto; }
+  .gallery-masonry { columns:2; }
+  .testimonial-card { min-width:calc(50% - 14px); }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+  .pricing-grid { grid-template-columns:1fr; max-width:420px; margin:0 auto; }
+}
+@media(max-width:768px) {
+  .nav-links {
+    position:fixed; top:0; right:0; width:280px; height:100vh;
+    background:var(--cream); flex-direction:column; padding:100px 30px 30px;
+    gap:20px; transform:translateX(100%); transition:transform 0.4s;
+    box-shadow:-4px 0 20px rgba(0,0,0,0.1); z-index:9998;
+  }
+  .nav-links.active { transform:translateX(0); }
+  .hamburger { display:flex; z-index:9999; }
+  .form-grid { grid-template-columns:1fr; }
+  .gallery-masonry { columns:2; }
+  .testimonial-card { min-width:100%; }
+  .contact-grid { grid-template-columns:1fr; }
+  .footer-grid { grid-template-columns:1fr; }
+  .services-grid { grid-template-columns:1fr; max-width:420px; margin:0 auto; }
+  .about-awards { flex-direction:column; }
+  .hero-btns { flex-direction:column; align-items:center; }
+  .about-experience-images .exp-img { height:120px; }
+}
+@media(max-width:480px) {
+  .gallery-masonry { columns:1; }
+  .nav-logo { font-size:1.4rem; }
+  .about-experience-images .exp-img { height:100px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">Luxe Bloom</div>
+  <div class="loader-spinner"></div>
+</div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scrollProgress"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="#hero" class="nav-logo">Luxe <span>Bloom</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#pricing">Packages</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-actions">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+      <i class="fas fa-moon"></i>
+    </button>
+    <button class="nav-checkout-btn" id="openCheckout">
+      <i class="fas fa-shopping-bag"></i> Cart
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg-animation"></div>
+  <div class="hero-particles" id="heroParticles"></div>
+  <div class="floating-shapes">
+    <div class="fshape"></div><div class="fshape"></div><div class="fshape"></div><div class="fshape"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Premium Bridal Boutique & Studio</div>
+    <h1 class="hero-title">
+      Transform Your Beauty with <span class="typed-text" id="typedText"></span><span class="cursor"></span>
+    </h1>
+    <p class="hero-subtitle">Where elegance meets artistry. Experience luxury bridal makeup, hair styling, and bespoke beauty services crafted just for you.</p>
+    <div class="hero-btns">
+      <a href="#appointment" class="btn-primary btn-shimmer" onclick="addRipple(event)">Book Appointment</a>
+      <a href="#services" class="btn-secondary" onclick="addRipple(event)">View Services</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-mouse"></div>
+  </div>
+</section>
+
+<!-- ABOUT / EXPERIENCE -->
+<section class="about" id="about">
+  <div class="section-header fade-in">
+    <div class="section-tag">Our Story</div>
+    <h2 class="section-title">A Legacy of <span>Elegance</span></h2>
+    <p class="section-subtitle">Dedicated to making every woman feel extraordinary on her most special day.</p>
+    <div class="section-separator"></div>
+  </div>
+  <div class="about-grid">
+    <!-- LEFT COLUMN: main image + experience grid -->
+    <div class="about-left-col fade-in-left">
+      <div class="about-image-wrapper">
+        <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&h=750&fit=crop&q=80" alt="Bridal Makeup Artist at Work">
+        <div class="about-image-accent"></div>
+        <div class="about-exp-badge">
+          <span class="num">15+</span>
+          <span class="label">Years Experience</span>
+        </div>
+      </div>
+      <div class="about-experience-label">✦ Our Studio & Work</div>
+      <div class="about-experience-images">
+        <img class="exp-img" src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=250&fit=crop&q=80" alt="Makeup Brushes and Products in Boutique">
+        <img class="exp-img" src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=300&h=250&fit=crop&q=80" alt="Bridal Makeup Closeup">
+        <img class="exp-img" src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=300&h=250&fit=crop&q=80" alt="Traditional Bridal Look">
+        <img class="exp-img" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=300&h=250&fit=crop&q=80" alt="Hair Styling in Studio">
+      </div>
+    </div>
+    <!-- RIGHT COLUMN: text -->
+    <div class="about-text fade-in-right">
+      <h3>Crafting Timeless Beauty Since 2009</h3>
+      <p>Luxe Bloom was founded with a singular vision — to redefine bridal beauty through artistry, precision, and personalized care. Our founder, Priya Sharma, began her journey with a passion for transforming faces into breathtaking canvases of elegance.</p>
+      <p>Today, Luxe Bloom stands as the city's most trusted bridal boutique, having adorned over 3,000 brides and counting. Our commitment to using premium products, staying ahead of trends, and providing a luxurious experience sets us apart.</p>
+      <p>Every stroke of the brush, every pin in the hair, every drape of the saree — is done with love, expertise, and an unwavering eye for detail.</p>
+      <div class="about-awards">
+        <div class="about-award-item">
+          <i class="fas fa-trophy"></i>
+          <span>Best Bridal Studio 2024</span>
+        </div>
+        <div class="about-award-item">
+          <i class="fas fa-certificate"></i>
+          <span>ISO Certified Studio</span>
+        </div>
+        <div class="about-award-item">
+          <i class="fas fa-star"></i>
+          <span>5-Star Rated on Google</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-header fade-in">
+    <div class="section-tag">What We Offer</div>
+    <h2 class="section-title">Our <span>Services</span></h2>
+    <p class="section-subtitle">From bridal transformations to everyday glam, we offer a complete range of beauty services.</p>
+    <div class="section-separator"></div>
+  </div>
+  <div class="services-grid">
+    <div class="service-card fade-in">
+      <div class="service-card-img-wrap">
+        <img class="service-card-img" src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&h=300&fit=crop&q=80" alt="Bridal Makeup">
+      </div>
+      <div class="service-card-body">
+        <div class="service-icon"><i class="fas fa-crown"></i></div>
+        <h3>Bridal Makeup</h3>
+        <p>Complete bridal transformation with premium products, long-lasting finish, and a look that photographs beautifully.</p>
+        <div class="service-price">$299 <small>/ session</small></div>
+        <button class="service-add-btn" onclick="addToCart('Bridal Makeup',299)">Add to Cart</button>
+      </div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-card-img-wrap">
+        <img class="service-card-img" src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=500&h=300&fit=crop&q=80" alt="Party Makeup">
+      </div>
+      <div class="service-card-body">
+        <div class="service-icon"><i class="fas fa-glass-cheers"></i></div>
+        <h3>Party Makeup</h3>
+        <p>Glamorous party looks tailored to your outfit and occasion, from subtle elegance to bold statement styles.</p>
+        <div class="service-price">$149 <small>/ session</small></div>
+        <button class="service-add-btn" onclick="addToCart('Party Makeup',149)">Add to Cart</button>
+      </div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-card-img-wrap">
+        <img class="service-card-img" src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=500&h=300&fit=crop&q=80" alt="Hair Styling">
+      </div>
+      <div class="service-card-body">
+        <div class="service-icon"><i class="fas fa-cut"></i></div>
+        <h3>Hair Styling</h3>
+        <p>Expert hair styling including updos, curls, braids, and trending styles for any occasion or event.</p>
+        <div class="service-price">$99 <small>/ session</small></div>
+        <button class="service-add-btn" onclick="addToCart('Hair Styling',99)">Add to Cart</button>
+      </div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-card-img-wrap">
+        <img class="service-card-img" src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500&h=300&fit=crop&q=80" alt="Saree Draping">
+      </div>
+      <div class="service-card-body">
+        <div class="service-icon"><i class="fas fa-paint-brush"></i></div>
+        <h3>Saree Draping</h3>
+        <p>Perfect saree draping in multiple styles — Nivi, Bengali, Gujarati, and more — for a flawless silhouette.</p>
+        <div class="service-price">$79 <small>/ session</small></div>
+        <button class="service-add-btn" onclick="addToCart('Saree Draping',79)">Add to Cart</button>
+      </div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-card-img-wrap">
+        <img class="service-card-img" src="https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=500&h=300&fit=crop&q=80" alt="Mehendi Design">
+      </div>
+      <div class="service-card-body">
+        <div class="service-icon"><i class="fas fa-spa"></i></div>
+        <h3>Mehendi Design</h3>
+        <p>Intricate mehendi artistry for brides and guests — traditional, Arabic, and contemporary patterns.</p>
+        <div class="service-price">$129 <small>/ session</small></div>
+        <button class="service-add-btn" onclick="addToCart('Mehendi Design',129)">Add to Cart</button>
+      </div>
+    </div>
+    <div class="service-card fade-in">
+      <div class="service-card-img-wrap">
+        <img class="service-card-img" src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=500&h=300&fit=crop&q=80" alt="Skincare Treatment">
+      </div>
+      <div class="service-card-body">
+        <div class="service-icon"><i class="fas fa-heart"></i></div>
+        <h3>Skincare Treatment</h3>
+        <p>Revitalizing facials, deep cleansing, hydrating treatments, and pre-bridal skincare regimens.</p>
+        <div class="service-price">$179 <small>/ session</small></div>
+        <button class="service-add-btn" onclick="addToCart('Skincare Treatment',179)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPOINTMENT -->
+<section class="appointment" id="appointment">
+  <div class="section-header fade-in">
+    <div class="section-tag">Reserve Your Spot</div>
+    <h2 class="section-title">Book an <span>Appointment</span></h2>
+    <p class="section-subtitle">Let us create magic for you. Fill in the details and we'll get back to you within hours.</p>
+    <div class="section-separator"></div>
+  </div>
+  <div class="appointment-container fade-in">
+    <form class="appointment-form" id="appointmentForm" novalidate>
+      <div class="form-grid">
+        <div class="form-group">
+          <input type="text" id="apName" placeholder=" " required>
+          <label for="apName">Your Name</label>
+          <div class="form-error">Please enter your name</div>
+        </div>
+        <div class="form-group">
+          <input type="tel" id="apPhone" placeholder=" " required>
+          <label for="apPhone">Phone Number</label>
+          <div class="form-error">Please enter a valid phone number</div>
+        </div>
+        <div class="form-group">
+          <input type="email" id="apEmail" placeholder=" " required>
+          <label for="apEmail">Email Address</label>
+          <div class="form-error">Please enter a valid email</div>
+        </div>
+        <div class="form-group">
+          <select id="apService" required>
+            <option value="" disabled selected></option>
+            <option value="bridal">Bridal Makeup</option>
+            <option value="party">Party Makeup</option>
+            <option value="hair">Hair Styling</option>
+            <option value="saree">Saree Draping</option>
+            <option value="mehendi">Mehendi Design</option>
+            <option value="skincare">Skincare Treatment</option>
+          </select>
+          <label for="apService">Select Service</label>
+          <div class="form-error">Please select a service</div>
+        </div>
+        <div class="form-group">
+          <input type="date" id="apDate" placeholder=" " required>
+          <label for="apDate" style="top:-8px;left:14px;font-size:0.7rem;color:var(--primary);background:var(--white);font-weight:500;">Preferred Date</label>
+          <div class="form-error">Please select a date</div>
+        </div>
+        <div class="form-group">
+          <select id="apTime" required>
+            <option value="" disabled selected></option>
+            <option value="9am">9:00 AM</option>
+            <option value="10am">10:00 AM</option>
+            <option value="11am">11:00 AM</option>
+            <option value="12pm">12:00 PM</option>
+            <option value="2pm">2:00 PM</option>
+            <option value="3pm">3:00 PM</option>
+            <option value="4pm">4:00 PM</option>
+            <option value="5pm">5:00 PM</option>
+          </select>
+          <label for="apTime">Time Slot</label>
+          <div class="form-error">Please select a time</div>
+        </div>
+        <div class="form-group full">
+          <textarea id="apMessage" placeholder=" " rows="3"></textarea>
+          <label for="apMessage">Special Requests (Optional)</label>
+        </div>
+        <div class="form-submit">
+          <button type="submit" class="submit-btn btn-shimmer">Confirm Appointment</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <div class="section-header fade-in">
+    <div class="section-tag">Our Portfolio</div>
+    <h2 class="section-title">Beauty <span>Gallery</span></h2>
+    <p class="section-subtitle">A glimpse into the transformations we've created for our lovely clients.</p>
+    <div class="section-separator"></div>
+  </div>
+  <div class="gallery-filters fade-in">
+    <button class="gallery-filter-btn active" data-filter="all">All</button>
+    <button class="gallery-filter-btn" data-filter="bridal">Bridal</button>
+    <button class="gallery-filter-btn" data-filter="party">Party</button>
+    <button class="gallery-filter-btn" data-filter="hair">Hair</button>
+    <button class="gallery-filter-btn" data-filter="mehendi">Mehendi</button>
+  </div>
+  <div class="gallery-masonry fade-in" id="galleryGrid">
+    <div class="gallery-item" data-category="bridal" data-index="0">
+      <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&h=800&fit=crop&q=80" alt="Bridal Glam Look">
+      <div class="gallery-item-overlay"><span>Bridal Glam</span></div>
+    </div>
+    <div class="gallery-item" data-category="party" data-index="1">
+      <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=600&h=700&fit=crop&q=80" alt="Evening Party Makeup">
+      <div class="gallery-item-overlay"><span>Evening Party Look</span></div>
+    </div>
+    <div class="gallery-item" data-category="hair" data-index="2">
+      <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&h=750&fit=crop&q=80" alt="Elegant Hair Updo">
+      <div class="gallery-item-overlay"><span>Elegant Hair Updo</span></div>
+    </div>
+    <div class="gallery-item" data-category="mehendi" data-index="3">
+      <img src="https://images.unsplash.com/photo-1583089892943-e02e5b017b6a?w=600&h=850&fit=crop&q=80" alt="Mehendi Hands Design">
+      <div class="gallery-item-overlay"><span>Intricate Mehendi Art</span></div>
+    </div>
+    <div class="gallery-item" data-category="bridal" data-index="4">
+      <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=600&h=700&fit=crop&q=80" alt="Traditional Bride Look">
+      <div class="gallery-item-overlay"><span>Traditional Bride</span></div>
+    </div>
+    <div class="gallery-item" data-category="party" data-index="5">
+      <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=600&h=900&fit=crop&q=80" alt="Glam Makeup Closeup">
+      <div class="gallery-item-overlay"><span>Glam Makeup Details</span></div>
+    </div>
+    <div class="gallery-item" data-category="hair" data-index="6">
+      <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=600&h=650&fit=crop&q=80" alt="Professional Hair Styling">
+      <div class="gallery-item-overlay"><span>Professional Styling</span></div>
+    </div>
+    <div class="gallery-item" data-category="mehendi" data-index="7">
+      <img src="https://images.unsplash.com/photo-1600002418816-3e09fa34be4f?w=600&h=780&fit=crop&q=80" alt="Traditional Mehendi Pattern">
+      <div class="gallery-item-overlay"><span>Traditional Mehendi</span></div>
+    </div>
+    <div class="gallery-item" data-category="bridal" data-index="8">
+      <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=820&fit=crop&q=80" alt="Makeup In Progress">
+      <div class="gallery-item-overlay"><span>Makeup In Progress</span></div>
+    </div>
+    <div class="gallery-item" data-category="bridal" data-index="9">
+      <img src="https://images.unsplash.com/photo-1583391733956-6c78276477e2?w=600&h=750&fit=crop&q=80" alt="Traditional Bridal Attire">
+      <div class="gallery-item-overlay"><span>Traditional Bridal Attire</span></div>
+    </div>
+    <div class="gallery-item" data-category="hair" data-index="10">
+      <img src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=600&h=680&fit=crop&q=80" alt="Bridal Bun Style">
+      <div class="gallery-item-overlay"><span>Bridal Bun Style</span></div>
+    </div>
+    <div class="gallery-item" data-category="party" data-index="11">
+      <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=600&h=720&fit=crop&q=80" alt="Pre-Party Skincare Prep">
+      <div class="gallery-item-overlay"><span>Pre-Party Skincare</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose"><i class="fas fa-times"></i></button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev"><i class="fas fa-chevron-left"></i></button>
+  <img src="" alt="Preview" id="lightboxImg">
+  <button class="lightbox-nav lightbox-next" id="lightboxNext"><i class="fas fa-chevron-right"></i></button>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-header fade-in">
+    <div class="section-tag">Client Love</div>
+    <h2 class="section-title">What Our <span>Brides Say</span></h2>
+    <p class="section-subtitle">Hear from the women who trusted us with their most beautiful day.</p>
+    <div class="section-separator"></div>
+  </div>
+  <div class="testimonials-track" id="testimonialsTrack">
+    <div class="testimonial-card">
+      <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+      <p class="testimonial-text">"Luxe Bloom made me feel like a queen on my wedding day. The makeup lasted 14 hours and still looked flawless. I couldn't have asked for more!"</p>
+      <div class="testimonial-author">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face&q=80" alt="Ananya">
+        <div class="testimonial-author-info"><h4>Ananya Verma</h4><span>Bride, December 2024</span></div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+      <p class="testimonial-text">"The hair styling was absolutely stunning! They understood exactly what I wanted and delivered beyond my expectations. Highly recommend!"</p>
+      <div class="testimonial-author">
+        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face&q=80" alt="Priya">
+        <div class="testimonial-author-info"><h4>Priya Malhotra</h4><span>Bride, October 2024</span></div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+      <p class="testimonial-text">"The mehendi designs were so intricate and beautiful. My hands were the highlight of all my wedding photos. Thank you, Luxe Bloom!"</p>
+      <div class="testimonial-author">
+        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=face&q=80" alt="Meera">
+        <div class="testimonial-author-info"><h4>Meera Patel</h4><span>Bride, August 2024</span></div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div>
+      <p class="testimonial-text">"I booked the premium package and every penny was worth it. The skincare treatment before the wedding made my skin glow naturally!"</p>
+      <div class="testimonial-author">
+        <img src="https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100&h=100&fit=crop&crop=face&q=80" alt="Riya">
+        <div class="testimonial-author-info"><h4>Riya Kapoor</h4><span>Bride, November 2024</span></div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="testimonial-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+      <p class="testimonial-text">"From saree draping to the final touch-up, everything was perfect. The team is so professional and warm. I felt like a celebrity!"</p>
+      <div class="testimonial-author">
+        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=100&h=100&fit=crop&crop=face&q=80" alt="Sneha">
+        <div class="testimonial-author-info"><h4>Sneha Reddy</h4><span>Bride, January 2025</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="testimonials-dots" id="testimonialsDots"></div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-header fade-in">
+    <div class="section-tag">Our Packages</div>
+    <h2 class="section-title">Choose Your <span>Package</span></h2>
+    <p class="section-subtitle">Curated packages designed to give you the complete luxury experience.</p>
+    <div class="section-separator"></div>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card fade-in">
+      <h3>Bridal Package</h3>
+      <div class="price">$499<small>/ package</small></div>
+      <p class="price-desc">Everything a bride needs for her special day</p>
+      <ul class="pricing-features">
+        <li><i class="fas fa-check"></i> Bridal Makeup</li>
+        <li><i class="fas fa-check"></i> Hair Styling</li>
+        <li><i class="fas fa-check"></i> Saree Draping</li>
+        <li><i class="fas fa-check"></i> Touch-up Kit</li>
+        <li><i class="fas fa-check"></i> Pre-bridal Consultation</li>
+      </ul>
+      <button class="pricing-btn secondary-btn" onclick="addToCart('Bridal Package',499)">Select Package</button>
+    </div>
+    <div class="pricing-card featured fade-in">
+      <h3>Premium Package</h3>
+      <div class="price">$899<small>/ package</small></div>
+      <p class="price-desc">The ultimate luxury experience from head to toe</p>
+      <ul class="pricing-features">
+        <li><i class="fas fa-check"></i> All Bridal Package Features</li>
+        <li><i class="fas fa-check"></i> Mehendi Design</li>
+        <li><i class="fas fa-check"></i> Skincare Treatment</li>
+        <li><i class="fas fa-check"></i> Engagement Look</li>
+        <li><i class="fas fa-check"></i> 2 Additional Touch-ups</li>
+        <li><i class="fas fa-check"></i> Priority Booking</li>
+      </ul>
+      <button class="pricing-btn primary-btn btn-shimmer" onclick="addToCart('Premium Package',899)">Select Package</button>
+    </div>
+    <div class="pricing-card fade-in">
+      <h3>Party Package</h3>
+      <div class="price">$299<small>/ package</small></div>
+      <p class="price-desc">Perfect for parties, receptions, and celebrations</p>
+      <ul class="pricing-features">
+        <li><i class="fas fa-check"></i> Party Makeup</li>
+        <li><i class="fas fa-check"></i> Hair Styling</li>
+        <li><i class="fas fa-check"></i> Saree/Outfit Draping</li>
+        <li><i class="fas fa-check"></i> Touch-up Session</li>
+      </ul>
+      <button class="pricing-btn secondary-btn" onclick="addToCart('Party Package',299)">Select Package</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-header fade-in">
+    <div class="section-tag">Get In Touch</div>
+    <h2 class="section-title">Contact <span>Us</span></h2>
+    <p class="section-subtitle">Have questions? We'd love to hear from you. Reach out anytime.</p>
+    <div class="section-separator"></div>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-form-wrap fade-in-left">
+      <form id="contactForm" novalidate>
+        <div class="form-grid">
+          <div class="form-group">
+            <input type="text" placeholder=" " required>
+            <label>Your Name</label>
+          </div>
+          <div class="form-group">
+            <input type="email" placeholder=" " required>
+            <label>Email Address</label>
+          </div>
+          <div class="form-group full">
+            <textarea placeholder=" " rows="4"></textarea>
+            <label>Your Message</label>
+          </div>
+          <div class="form-submit">
+            <button type="submit" class="submit-btn btn-shimmer">Send Message</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="contact-info fade-in-right">
+      <div class="contact-info-item">
+        <i class="fas fa-phone-alt"></i>
+        <div><h4>Call Us</h4><p>+1 (555) 123-4567</p></div>
+      </div>
+      <div class="contact-info-item">
+        <i class="fas fa-envelope"></i>
+        <div><h4>Email Us</h4><p>hello@luxebloom.com</p></div>
+      </div>
+      <div class="contact-info-item">
+        <i class="fas fa-map-marker-alt"></i>
+        <div><h4>Visit Us</h4><p>42 Rose Garden Lane, Beverly Hills, CA 90210</p></div>
+      </div>
+      <div class="contact-info-item">
+        <i class="fas fa-clock"></i>
+        <div><h4>Working Hours</h4><p>Mon - Sat: 9:00 AM - 7:00 PM<br>Sunday: By Appointment Only</p></div>
+      </div>
+      <div class="contact-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26430.39375298049!2d-118.40807795!3d34.0736204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80c2bc04d6d147ab%3A0xd6c7c379fd081ed1!2sBeverly%20Hills%2C%20CA%2090210!5e0!3m2!1sen!2sus!4v1703000000000!5m2!1sen!2sus" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" id="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">Luxe Bloom</div>
+      <p>Premium bridal boutique and makeup studio crafting timeless beauty since 2009. Your most beautiful day deserves our most beautiful artistry.</p>
+      <div class="footer-socials">
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-pinterest-p"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fab fa-tiktok"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#pricing">Packages</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Bridal Makeup</a></li>
+        <li><a href="#services">Party Makeup</a></li>
+        <li><a href="#services">Hair Styling</a></li>
+        <li><a href="#services">Saree Draping</a></li>
+        <li><a href="#services">Mehendi Design</a></li>
+        <li><a href="#services">Skincare</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-newsletter">
+      <h4>Newsletter</h4>
+      <p>Subscribe for beauty tips, exclusive offers, and bridal inspiration delivered to your inbox.</p>
+      <div class="footer-newsletter-form">
+        <input type="email" placeholder="Your email" id="newsletterEmail">
+        <button onclick="subscribeNewsletter()">Subscribe</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Luxe Bloom. All rights reserved.</p>
+    <p>Designed with <i class="fas fa-heart" style="color:var(--primary-light);"></i> for beauty</p>
+  </div>
+</footer>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/15551234567" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top"><i class="fas fa-chevron-up"></i></button>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-content">
+    <div class="modal-icon"><i class="fas fa-check"></i></div>
+    <h3>Booking Confirmed!</h3>
+    <p>Thank you for choosing Luxe Bloom. We'll reach out to you shortly to confirm the details.</p>
+    <button class="modal-close-btn" onclick="closeModal('successModal')">Wonderful!</button>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal-content">
+    <div class="modal-icon"><i class="fas fa-paper-plane"></i></div>
+    <h3>Message Sent!</h3>
+    <p>We've received your message and will get back to you within 24 hours.</p>
+    <button class="modal-close-btn" onclick="closeModal('contactModal')">Got It!</button>
+  </div>
+</div>
+
+<!-- CHECKOUT PANEL -->
+<div class="checkout-overlay" id="checkoutOverlay">
+  <div class="checkout-panel">
+    <div class="checkout-header">
+      <h2>Your Cart</h2>
+      <button class="checkout-close" onclick="closeCheckout()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="checkout-items" id="checkoutItems"></div>
+    <div class="checkout-total">
+      <span>Total</span>
+      <span id="checkoutTotal">$0</span>
+    </div>
+    <form id="checkoutForm" novalidate>
+      <div class="form-grid">
+        <div class="form-group full">
+          <input type="text" placeholder=" " required id="coName">
+          <label>Full Name</label>
+        </div>
+        <div class="form-group full">
+          <input type="email" placeholder=" " required id="coEmail">
+          <label>Email Address</label>
+        </div>
+        <div class="form-group full">
+          <input type="tel" placeholder=" " required id="coPhone">
+          <label>Phone Number</label>
+        </div>
+        <div class="form-group full">
+          <textarea placeholder=" " rows="2" id="coAddress"></textarea>
+          <label>Delivery Address</label>
+        </div>
+        <div class="form-submit">
+          <button type="submit" class="submit-btn btn-shimmer">Proceed to Payment</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- CHECKOUT SUCCESS MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal-content">
+    <div class="modal-icon"><i class="fas fa-shopping-bag"></i></div>
+    <h3>Order Placed!</h3>
+    <p>Your order has been confirmed. We'll contact you shortly with next steps. Thank you for choosing Luxe Bloom!</p>
+    <button class="modal-close-btn" onclick="closeModal('checkoutModal');cart=[];updateCartUI();">Continue Shopping</button>
+  </div>
+</div>
+
+<script>
+/* LOADER */
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1200);
+});
+
+/* TYPING */
+const typedTexts = ['Elegance', 'Grace', 'Confidence', 'Radiance', 'Beauty'];
+let textIdx = 0, charIdx = 0, isDeleting = false;
+const typedEl = document.getElementById('typedText');
+function typeWriter() {
+  const current = typedTexts[textIdx];
+  if (isDeleting) { typedEl.textContent = current.substring(0, charIdx - 1); charIdx--; }
+  else { typedEl.textContent = current.substring(0, charIdx + 1); charIdx++; }
+  let speed = isDeleting ? 50 : 100;
+  if (!isDeleting && charIdx === current.length) { speed = 2000; isDeleting = true; }
+  else if (isDeleting && charIdx === 0) { isDeleting = false; textIdx = (textIdx + 1) % typedTexts.length; speed = 300; }
+  setTimeout(typeWriter, speed);
+}
+typeWriter();
+
+/* PARTICLES */
+(function() {
+  const c = document.getElementById('heroParticles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div'); p.className = 'particle';
+    const s = Math.random() * 6 + 2;
+    p.style.width = s + 'px'; p.style.height = s + 'px';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    c.appendChild(p);
+  }
+})();
+
+/* NAVBAR SCROLL */
+const navbar = document.getElementById('navbar');
+const scrollProgress = document.getElementById('scrollProgress');
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  const sy = window.scrollY;
+  const dh = document.documentElement.scrollHeight - window.innerHeight;
+  navbar.classList.toggle('scrolled', sy > 50);
+  scrollProgress.style.width = (sy / dh * 100) + '%';
+  backToTop.classList.toggle('visible', sy > 500);
+  document.querySelectorAll('section[id]').forEach(sec => {
+    const t = sec.offsetTop - 100, b = t + sec.offsetHeight;
+    const l = document.querySelector(`.nav-links a[href="#${sec.id}"]`);
+    if (l) l.classList.toggle('active', sy >= t && sy < b);
+  });
+});
+backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* HAMBURGER */
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+hamburger.addEventListener('click', () => { hamburger.classList.toggle('active'); navLinks.classList.toggle('active'); });
+navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { hamburger.classList.remove('active'); navLinks.classList.remove('active'); }));
+
+/* DARK MODE */
+const themeToggle = document.getElementById('themeToggle');
+const icon = themeToggle.querySelector('i');
+themeToggle.addEventListener('click', () => {
+  const d = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', d ? 'light' : 'dark');
+  icon.className = d ? 'fas fa-moon' : 'fas fa-sun';
+});
+
+/* RIPPLE */
+function addRipple(e) {
+  const btn = e.currentTarget, r = document.createElement('span'); r.className = 'ripple';
+  const rect = btn.getBoundingClientRect(), sz = Math.max(rect.width, rect.height);
+  r.style.width = r.style.height = sz + 'px';
+  r.style.left = (e.clientX - rect.left - sz/2) + 'px';
+  r.style.top = (e.clientY - rect.top - sz/2) + 'px';
+  btn.appendChild(r); setTimeout(() => r.remove(), 600);
+}
+document.querySelectorAll('.btn-primary,.btn-secondary,.submit-btn,.pricing-btn,.service-add-btn').forEach(b => b.addEventListener('click', addRipple));
+
+/* SCROLL ANIMATIONS */
+const obs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.fade-in,.fade-in-left,.fade-in-right').forEach(el => obs.observe(el));
+
+/* APPOINTMENT FORM */
+document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+  e.preventDefault(); let valid = true;
+  [{ id:'apName', ck:v=>v.trim().length>0 }, { id:'apPhone', ck:v=>/^[\d\s\-\+\(\)]{7,15}$/.test(v.trim()) },
+   { id:'apEmail', ck:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+   { id:'apService', ck:v=>v!=='' }, { id:'apDate', ck:v=>v!=='' }, { id:'apTime', ck:v=>v!=='' }
+  ].forEach(f => {
+    const el = document.getElementById(f.id), g = el.closest('.form-group');
+    if (!f.ck(el.value)) { g.classList.add('error'); valid = false; } else { g.classList.remove('error'); }
+  });
+  if (valid) { openModal('successModal'); this.reset(); }
+});
+
+/* CONTACT FORM */
+document.getElementById('contactForm').addEventListener('submit', function(e) { e.preventDefault(); openModal('contactModal'); this.reset(); });
+
+/* MODALS */
+function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; }
+document.querySelectorAll('.modal-overlay').forEach(m => m.addEventListener('click', function(e) { if (e.target === this) closeModal(this.id); }));
+
+/* GALLERY FILTER */
+const filterBtns = document.querySelectorAll('.gallery-filter-btn');
+const galleryItems = document.querySelectorAll('.gallery-item');
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    galleryItems.forEach(item => { item.style.display = (f === 'all' || item.dataset.category === f) ? '' : 'none'; });
+  });
+});
+
+/* LIGHTBOX */
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+let currentLB = 0, visibleItems = [];
+function updateVisible() { visibleItems = Array.from(galleryItems).filter(i => i.style.display !== 'none'); }
+galleryItems.forEach(item => {
+  item.addEventListener('click', () => {
+    updateVisible(); currentLB = visibleItems.indexOf(item);
+    lightboxImg.src = item.querySelector('img').src;
+    lightbox.classList.add('active'); document.body.style.overflow = 'hidden';
+  });
+});
+document.getElementById('lightboxClose').addEventListener('click', closeLB);
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLB(); });
+function closeLB() { lightbox.classList.remove('active'); document.body.style.overflow = ''; }
+document.getElementById('lightboxPrev').addEventListener('click', () => {
+  currentLB = (currentLB - 1 + visibleItems.length) % visibleItems.length;
+  lightboxImg.src = visibleItems[currentLB].querySelector('img').src;
+});
+document.getElementById('lightboxNext').addEventListener('click', () => {
+  currentLB = (currentLB + 1) % visibleItems.length;
+  lightboxImg.src = visibleItems[currentLB].querySelector('img').src;
+});
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('active')) return;
+  if (e.key === 'Escape') closeLB();
+  if (e.key === 'ArrowLeft') document.getElementById('lightboxPrev').click();
+  if (e.key === 'ArrowRight') document.getElementById('lightboxNext').click();
+});
+
+/* TESTIMONIALS */
+const track = document.getElementById('testimonialsTrack');
+const dotsC = document.getElementById('testimonialsDots');
+const cards = track.querySelectorAll('.testimonial-card');
+let curSlide = 0, spv = 3, autoSI;
+function updateSPV() { if (window.innerWidth<768) spv=1; else if (window.innerWidth<1024) spv=2; else spv=3; }
+function createDots() {
+  dotsC.innerHTML = '';
+  for (let i = 0; i < Math.ceil(cards.length/spv); i++) {
+    const d = document.createElement('button'); d.addEventListener('click', () => goSlide(i)); dotsC.appendChild(d);
+  }
+}
+function goSlide(idx) {
+  updateSPV(); const mx = Math.ceil(cards.length/spv)-1; curSlide = Math.min(idx,mx);
+  const cw = cards[0].offsetWidth + 28;
+  track.style.transform = `translateX(-${curSlide*spv*cw}px)`;
+  dotsC.querySelectorAll('button').forEach((d,i) => d.classList.toggle('active', i===curSlide));
+}
+function startAuto() { stopAuto(); autoSI = setInterval(() => { updateSPV(); goSlide(curSlide >= Math.ceil(cards.length/spv)-1 ? 0 : curSlide+1); }, 4000); }
+function stopAuto() { clearInterval(autoSI); }
+function initCar() { updateSPV(); createDots(); goSlide(0); startAuto(); }
+initCar(); window.addEventListener('resize', initCar);
+track.addEventListener('mouseenter', stopAuto); track.addEventListener('mouseleave', startAuto);
+
+/* CART */
+let cart = [];
+function addToCart(name, price) {
+  const ex = cart.find(i => i.name === name);
+  if (ex) ex.qty++; else cart.push({ name, price, qty: 1 });
+  updateCartUI();
+  const badge = document.getElementById('cartBadge');
+  badge.style.transform = 'scale(1.4)';
+  setTimeout(() => badge.style.transform = '', 200);
+}
+function removeFromCart(i) { cart.splice(i, 1); updateCartUI(); }
+function updateCartUI() {
+  const badge = document.getElementById('cartBadge');
+  const total = cart.reduce((s,i) => s+i.qty, 0);
+  badge.textContent = total;
+  badge.classList.toggle('show', total > 0);
+  const c = document.getElementById('checkoutItems');
+  const t = document.getElementById('checkoutTotal');
+  if (!cart.length) { c.innerHTML = '<div class="checkout-empty"><i class="fas fa-shopping-bag"></i><p>Your cart is empty</p></div>'; t.textContent = '$0'; return; }
+  c.innerHTML = cart.map((item,idx) => `<div class="checkout-item"><span class="checkout-item-name">${item.name}${item.qty>1?' × '+item.qty:''}</span><span class="checkout-item-price">$${item.price*item.qty}</span><button class="checkout-item-remove" onclick="removeFromCart(${idx})"><i class="fas fa-trash-alt"></i></button></div>`).join('');
+  t.textContent = '$' + cart.reduce((s,i) => s+i.price*i.qty, 0);
+}
+function openCheckout() { updateCartUI(); document.getElementById('checkoutOverlay').classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeCheckout() { document.getElementById('checkoutOverlay').classList.remove('active'); document.body.style.overflow = ''; }
+document.getElementById('openCheckout').addEventListener('click', openCheckout);
+document.getElementById('checkoutOverlay').addEventListener('click', function(e) { if (e.target === this) closeCheckout(); });
+document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  if (!cart.length) { alert('Your cart is empty! Please add services before checkout.'); return; }
+  closeCheckout(); openModal('checkoutModal');
+});
+
+/* NEWSLETTER */
+function subscribeNewsletter() {
+  const input = document.getElementById('newsletterEmail');
+  if (input.value && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim())) { openModal('contactModal'); input.value = ''; }
+  else { input.style.borderColor = '#e74c3c'; setTimeout(() => input.style.borderColor = '', 2000); }
+}
+
+/* PARALLAX */
+window.addEventListener('scroll', () => {
+  const sy = window.scrollY;
+  document.querySelectorAll('.fshape').forEach((s,i) => { s.style.transform = `translateY(${sy*(0.03+i*0.01)}px)`; });
+});
+
+updateCartUI();
+</script>
+</body>
+</html>
